@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio dashboard — sarinacreates</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="admin-shell" id="gate" style="display:none;">
+  <aside class="admin-side">
+    <a href="../index.html" class="brand">sarina<span class="dot">·</span>creates</a>
+    <nav>
+      <a href="#overview" data-tab="overview" class="active">Overview</a>
+      <a href="#orders" data-tab="orders">Orders</a>
+      <a href="#products" data-tab="products">Products</a>
+      <a href="#settings" data-tab="settings">Settings</a>
+      <a href="#" id="logout" style="margin-top:20px;opacity:.8;">Log out</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+
+    <section id="tab-overview" class="tab-panel">
+      <h1 style="font-size:1.8rem;">Overview</h1>
+      <div class="stat-row" id="stats"></div>
+      <h3>Latest orders</h3>
+      <div id="latest-orders"></div>
+    </section>
+
+    <section id="tab-orders" class="tab-panel" style="display:none;">
+      <div class="section-head"><h1 style="font-size:1.8rem;">Orders</h1></div>
+      <div id="orders-table"></div>
+    </section>
+
+    <section id="tab-products" class="tab-panel" style="display:none;">
+      <div class="section-head">
+        <h1 style="font-size:1.8rem;">Products</h1>
+        <button class="btn btn-primary btn-sm" id="add-product-btn">Add a piece</button>
+      </div>
+      <div id="products-table"></div>
+    </section>
+
+    <section id="tab-settings" class="tab-panel" style="display:none;">
+      <h1 style="font-size:1.8rem;">Settings</h1>
+      <div class="form-panel" style="margin:0;max-width:420px;">
+        <h3 style="font-size:1rem;">Change admin password</h3>
+        <div id="pw-msg"></div>
+        <form id="pw-form">
+          <div class="field"><label for="new-pw">New password</label><input id="new-pw" type="password" minlength="6" required></div>
+          <button class="btn btn-teal btn-block" type="submit">Update password</button>
+        </form>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div id="not-admin" style="display:none;padding:80px 20px;text-align:center;">
+  <h2>Studio access only</h2>
+  <p><a class="btn btn-primary" href="login.html">Go to studio login</a></p>
+</div>
+
+<!-- product modal -->
+<div class="modal-backdrop" id="product-modal">
+  <div class="modal">
+    <h3 id="modal-title">Add a piece</h3>
+    <form id="product-form">
+      <input type="hidden" id="p-id">
+      <div class="field"><label for="p-name">Name</label><input id="p-name" required></div>
+      <div class="form-row">
+        <div class="field"><label for="p-category">Category</label><input id="p-category" required></div>
+        <div class="field"><label for="p-price">Price (₹)</label><input id="p-price" type="number" min="0" step="1" required></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label for="p-dims">Dimensions</label><input id="p-dims" required></div>
+        <div class="field"><label for="p-stock">Stock</label><input id="p-stock" type="number" min="0" required></div>
+      </div>
+      <div class="field"><label for="p-desc">Description</label><textarea id="p-desc" required></textarea></div>
+
+      <div class="field">
+        <label>Product photos</label>
+        <div id="p-images-grid" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;"></div>
+        <input id="p-image-file" type="file" accept="image/*" multiple>
+        <p class="hint" style="margin-top:8px;margin-bottom:0;">Select one or more photos (JPG/PNG) — they're automatically resized to save space. The first photo is used as the main image; drag isn't supported yet, so add them in the order you want. Leave empty to keep the generated colour tile below.</p>
+      </div>
+
+      <div class="field">
+        <label>Placeholder art colours</label>
+        <div class="form-row" style="grid-template-columns:1fr 1fr 1fr;">
+          <input id="p-c1" type="text" value="#123B3B">
+          <input id="p-c2" type="text" value="#1F7A6C">
+          <input id="p-c3" type="text" value="#EFEAE0">
+        </div>
+        <p class="hint">Any 3 hex colours — used only until at least one photo is added above.</p>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button type="submit" class="btn btn-primary">Save piece</button>
+        <button type="button" class="btn btn-ghost" id="cancel-modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script>
+  if (!SC.isAdmin()) {
+    document.getElementById('not-admin').style.display = 'block';
+  } else {
+    document.getElementById('gate').style.display = 'grid';
+    initDashboard();
+  }
+
+  function initDashboard() {
+    document.getElementById('logout').addEventListener('click', (e) => {
+      e.preventDefault(); SC.adminLogout(); location.href = "login.html";
+    });
+
+    // tabs
+    document.querySelectorAll('[data-tab]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('[data-tab]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+        document.getElementById('tab-' + link.getAttribute('data-tab')).style.display = 'block';
+        if (link.getAttribute('data-tab') === 'orders') renderOrders();
+        if (link.getAttribute('data-tab') === 'products') renderProducts();
+      });
+    });
+
+    renderOverview();
+
+    // product modal wiring
+    const modal = document.getElementById('product-modal');
+    document.getElementById('add-product-btn').addEventListener('click', () => openProductModal(null));
+    document.getElementById('cancel-modal').addEventListener('click', () => modal.classList.remove('open'));
+
+    document.getElementById('p-image-file').addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      for (const file of files) {
+        if (file.size > 15 * 1024 * 1024) {
+          alert(`"${file.name}" is too large to process — try a photo under 15MB.`);
+          continue;
+        }
+        try {
+          // Photos are resized before upload — keeps things fast on a slow
+          // connection. The resulting blob is what actually gets uploaded;
+          // the dataUrl is only used to preview it here in the admin panel.
+          const { blob, dataUrl } = await SC.resizeImage(file);
+          pendingUploads.push({ blob, filename: (file.name || "photo").replace(/\.[^.]+$/, "") + ".jpg" });
+          currentImages.push(dataUrl);
+          renderImagesGrid();
+        } catch (err) {
+          alert(`Couldn't process "${file.name}" — try a different photo.`);
+        }
+      }
+      e.target.value = "";
+    });
+
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Saving…";
+      // existing (already-uploaded) images are the ones still left in
+      // currentImages that aren't one of the new local preview dataURLs
+      const existingImages = currentImages.filter(src => !src.startsWith("data:"));
+      const result = await SC.saveProduct({
+        id: document.getElementById('p-id').value || "",
+        name: document.getElementById('p-name').value.trim(),
+        category: document.getElementById('p-category').value.trim(),
+        price: parseFloat(document.getElementById('p-price').value),
+        dims: document.getElementById('p-dims').value.trim(),
+        stock: parseInt(document.getElementById('p-stock').value, 10),
+        desc: document.getElementById('p-desc').value.trim(),
+        palette: [document.getElementById('p-c1').value, document.getElementById('p-c2').value, document.getElementById('p-c3').value],
+        angle: Math.floor(Math.random() * 180)
+      }, pendingUploads, existingImages);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Save piece";
+      if (!result.ok) {
+        alert(result.error || "Couldn't save this piece — try again.");
+        return;
+      }
+      modal.classList.remove('open');
+      renderProducts();
+      renderOverview();
+    });
+
+    document.getElementById('pw-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await SC.setAdminPassword(document.getElementById('new-pw').value);
+      document.getElementById('pw-msg').innerHTML = `<div class="success-msg">Password updated.</div>`;
+      document.getElementById('pw-form').reset();
+    });
+  }
+
+  let currentImages = [];   // preview list shown in the modal (URLs + local data: previews)
+  let pendingUploads = [];  // {blob, filename} for photos picked in this modal session, not yet uploaded
+
+  function openProductModal(product) {
+    document.getElementById('modal-title').textContent = product ? "Edit piece" : "Add a piece";
+    document.getElementById('p-id').value = product ? product.id : "";
+    document.getElementById('p-name').value = product ? product.name : "";
+    document.getElementById('p-category').value = product ? product.category : "";
+    document.getElementById('p-price').value = product ? product.price : "";
+    document.getElementById('p-dims').value = product ? product.dims : "";
+    document.getElementById('p-stock').value = product ? product.stock : 1;
+    document.getElementById('p-desc').value = product ? product.desc : "";
+    document.getElementById('p-image-file').value = "";
+    currentImages = product && product.images ? product.images.slice() : [];
+    pendingUploads = [];
+    const palette = product && product.palette ? product.palette : ["#123B3B", "#1F7A6C", "#EFEAE0"];
+    document.getElementById('p-c1').value = palette[0];
+    document.getElementById('p-c2').value = palette[1];
+    document.getElementById('p-c3').value = palette[2];
+    renderImagesGrid();
+    document.getElementById('product-modal').classList.add('open');
+  }
+
+  function renderImagesGrid() {
+    const grid = document.getElementById('p-images-grid');
+    grid.innerHTML = currentImages.map((src, i) => `
+      <div style="position:relative;width:74px;">
+        <div class="art-tile sm" style="width:74px;"><img src="${src}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></div>
+        ${i === 0 ? '<span class="badge" style="left:4px;top:4px;font-size:.58rem;padding:2px 6px;">Main</span>' : ''}
+        <button type="button" data-remove-img="${i}" class="btn btn-danger btn-sm" style="position:absolute;top:-8px;right:-8px;padding:0 6px;line-height:1.6;border-radius:50%;">×</button>
+      </div>`).join('') || `<p class="hint" style="margin:0;">No photos yet — the colour tile below will be used.</p>`;
+    grid.querySelectorAll('[data-remove-img]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = parseInt(btn.getAttribute('data-remove-img'), 10);
+        const removedSrc = currentImages[i];
+        // if the removed one was a not-yet-uploaded local preview, also drop
+        // its pending upload so it isn't sent to the server on save
+        if (removedSrc && removedSrc.startsWith("data:")) {
+          const uploadedSoFar = currentImages.slice(0, i).filter(s => s.startsWith("data:")).length;
+          pendingUploads.splice(uploadedSoFar, 1);
+        }
+        currentImages.splice(i, 1);
+        renderImagesGrid();
+      });
+    });
+  }
+
+  async function renderOverview() {
+    const [orders, products] = await Promise.all([SC.getOrders(), SC.getProducts()]);
+    const revenue = orders.filter(o => o.status !== 'Cancelled').reduce((s, o) => s + o.total, 0);
+    document.getElementById('stats').innerHTML = `
+      <div class="stat-card"><div class="num">${orders.length}</div><div class="lbl">Total orders</div></div>
+      <div class="stat-card"><div class="num">${orders.filter(o => o.status === 'Pending').length}</div><div class="lbl">Awaiting you</div></div>
+      <div class="stat-card"><div class="num">${SC.money(revenue)}</div><div class="lbl">Order value</div></div>
+      <div class="stat-card"><div class="num">${products.length}</div><div class="lbl">Pieces listed</div></div>`;
+
+    const latest = orders.slice(0, 5);
+    document.getElementById('latest-orders').innerHTML = latest.length ? orderTable(latest) : `<div class="empty-state"><h3>No orders yet</h3><p>They'll show up here as soon as someone checks out.</p></div>`;
+    wireOrderControls();
+  }
+
+  function orderTable(orders) {
+    return `<table class="table"><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th></tr></thead><tbody>
+      ${orders.map(o => `<tr>
+        <td style="font-family:var(--mono);">${o.id}<br><span class="hint" style="margin:0;">${new Date(o.createdAt).toLocaleDateString()}</span></td>
+        <td>${o.customer.name}<br><span class="hint" style="margin:0;">${o.customer.email}<br>${o.customer.phone}</span></td>
+        <td>${o.items.map(i => i.name + ' ×' + i.qty).join('<br>')}</td>
+        <td>${SC.money(o.total)}</td>
+        <td>
+          <select data-status="${o.id}" class="status-select">
+            ${['Pending','Confirmed','Shipped','Cancelled'].map(s => `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+  }
+
+  function wireOrderControls() {
+    document.querySelectorAll('[data-status]').forEach(sel => {
+      sel.addEventListener('change', async () => {
+        await SC.setOrderStatus(sel.getAttribute('data-status'), sel.value);
+        renderOverview();
+        if (document.getElementById('tab-orders').style.display !== 'none') renderOrders();
+      });
+    });
+  }
+
+  async function renderOrders() {
+    const orders = await SC.getOrders();
+    document.getElementById('orders-table').innerHTML = orders.length ? orderTable(orders) : `<div class="empty-state"><h3>No orders yet</h3></div>`;
+    wireOrderControls();
+  }
+
+  async function renderProducts() {
+    const products = await SC.getProducts();
+    document.getElementById('products-table').innerHTML = `
+      <table class="table"><thead><tr><th></th><th>Piece</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr></thead><tbody>
+        ${products.map(p => `<tr>
+          <td style="width:56px;"><div class="art-tile sm" data-art="${p.id}" style="width:48px;"></div></td>
+          <td>${p.name}<br><span class="hint" style="margin:0;">${p.dims}</span></td>
+          <td>${p.category}</td>
+          <td>${SC.money(p.price)}</td>
+          <td>${p.stock}</td>
+          <td style="text-align:right;white-space:nowrap;">
+            <button class="btn btn-ghost btn-sm" data-edit="${p.id}">Edit</button>
+            <button class="btn btn-danger btn-sm" data-del="${p.id}">Delete</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+    SC.renderTilesOnPage();
+    document.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', async () => openProductModal(await SC.getProduct(b.getAttribute('data-edit')))));
+    document.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', async () => {
+      if (confirm('Delete this piece? This cannot be undone.')) { await SC.deleteProduct(b.getAttribute('data-del')); renderProducts(); renderOverview(); }
+    }));
+  }
+</script>
+</body>
+</html>

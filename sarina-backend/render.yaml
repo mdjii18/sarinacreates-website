@@ -1,0 +1,21 @@
+services:
+  # Render Web Service (Java Spring Boot + Static Frontend)
+  - type: web
+    name: sarinacreates-web
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sarinacreates-db
+          property: connectionString
+      - key: ADMIN_PASSWORD
+        generateValue: true
+
+# Render Managed PostgreSQL Database
+databases:
+  - name: sarinacreates-db
+    databaseName: sarinacreates
+    user: postgres
+    plan: free

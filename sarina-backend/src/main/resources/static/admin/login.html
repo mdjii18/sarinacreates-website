@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio login — sarinacreates</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="background:var(--teal);min-height:100vh;">
+
+<main style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div class="form-panel">
+    <a href="../index.html" class="brand" style="justify-content:center;margin-bottom:18px;">sarina<span class="dot">·</span>creates</a>
+    <span class="eyebrow" style="display:block;text-align:center;">Studio access</span>
+    <h1 style="font-size:1.5rem;text-align:center;margin-top:6px;">Admin login</h1>
+    <div id="msg"></div>
+    <form id="admin-login-form">
+      <div class="field"><label for="password">Password</label><input id="password" type="password" required></div>
+      <button class="btn btn-primary btn-block" type="submit">Enter studio</button>
+    </form>
+    <p class="hint" style="margin-top:18px;text-align:center;">Default password is <strong>sarina2026</strong> — change it from Settings after your first login.</p>
+  </div>
+</main>
+
+<script src="../js/app.js"></script>
+<script>
+  document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const ok = await SC.adminLogin(document.getElementById('password').value);
+    if (ok) location.href = "dashboard.html";
+    else document.getElementById('msg').innerHTML = `<div class="error-msg">That password isn't right.</div>`;
+  });
+</script>
+</body>
+</html>

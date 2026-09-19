@@ -1,0 +1,138 @@
+{
+  "products": [
+    {
+      "id": "p1",
+      "name": "Low Tide",
+      "category": "Coasters",
+      "price": 2499,
+      "dims": "10cm round · set of 4",
+      "desc": "A set of four coasters poured in layered teal and sand, each one catching the light a little differently — like the shoreline at low tide.",
+      "stock": 6,
+      "images": [],
+      "palette": [
+        "#123B3B",
+        "#1F7A6C",
+        "#EFEAE0"
+      ],
+      "angle": 135
+    },
+    {
+      "id": "p2",
+      "name": "Amber Vein",
+      "category": "Wall Art",
+      "price": 11999,
+      "dims": "30cm × 40cm panel",
+      "desc": "Deep amber and brass resin poured over a walnut panel, with fine gold veining running through like light through honey.",
+      "stock": 2,
+      "images": [],
+      "palette": [
+        "#7a4a17",
+        "#B9903E",
+        "#12211F"
+      ],
+      "angle": 100
+    },
+    {
+      "id": "p3",
+      "name": "Geode Bloom",
+      "category": "Wall Art",
+      "price": 17499,
+      "dims": "40cm round panel",
+      "desc": "A geode-style pour built up in twelve layers, with crushed glass and gold leaf edging for a piece that looks lit from within.",
+      "stock": 1,
+      "images": [],
+      "palette": [
+        "#1F7A6C",
+        "#12211F",
+        "#D8B876"
+      ],
+      "angle": 60
+    },
+    {
+      "id": "p4",
+      "name": "Tidepool Tray",
+      "category": "Homeware",
+      "price": 4999,
+      "dims": "24cm × 15cm",
+      "desc": "A serving tray with a poured resin base in cool tidepool tones, sealed under a glass-smooth, food-safe top coat.",
+      "stock": 4,
+      "images": [],
+      "palette": [
+        "#0e2b2b",
+        "#1F7A6C",
+        "#9fd6c4"
+      ],
+      "angle": 45
+    },
+    {
+      "id": "p5",
+      "name": "Copper Fracture",
+      "category": "Jewelry",
+      "price": 2999,
+      "dims": "Pendant, 3.5cm × 2.8cm",
+      "desc": "A hand-cut resin pendant with suspended copper leaf fracture lines, hung on a waxed cotton cord.",
+      "stock": 9,
+      "images": [],
+      "palette": [
+        "#9C4222",
+        "#B9903E",
+        "#12211F"
+      ],
+      "angle": 160
+    },
+    {
+      "id": "p6",
+      "name": "Deep Current",
+      "category": "Wall Art",
+      "price": 14499,
+      "dims": "35cm × 50cm panel",
+      "desc": "Dark, moody blues built in deep layers to mimic the way light disappears the further you go under water.",
+      "stock": 1,
+      "images": [],
+      "palette": [
+        "#081c1c",
+        "#123B3B",
+        "#3aa08c"
+      ],
+      "angle": 120
+    },
+    {
+      "id": "p7",
+      "name": "Sandbar Set",
+      "category": "Coasters",
+      "price": 2699,
+      "dims": "10cm round · set of 4",
+      "desc": "Warm sand tones with a single thread of gold through each piece — a quieter companion to Low Tide.",
+      "stock": 5,
+      "images": [],
+      "palette": [
+        "#d9d1ba",
+        "#B9903E",
+        "#12211F"
+      ],
+      "angle": 75
+    },
+    {
+      "id": "p8",
+      "name": "Ember Pour",
+      "category": "Homeware",
+      "price": 4299,
+      "dims": "Bookend pair, 12cm h",
+      "desc": "A pair of bookends with a warm brick-and-brass pour, weighted and felt-backed to protect shelves.",
+      "stock": 3,
+      "images": [],
+      "palette": [
+        "#9C4222",
+        "#B9903E",
+        "#EFEAE0"
+      ],
+      "angle": 30
+    }
+  ],
+  "orders": [],
+  "admin": {
+    "email": "you@sarinacreates.com",
+    "passwordHash": "187a3dd1d8bb3660fcc77c1afcdf066a52c85819d254ffc458b778c1cd0f19ca"
+  },
+  "sessions": []
+}
