@@ -19,33 +19,49 @@ public class DatabaseConfig {
 
         if (targetUrl != null && !targetUrl.isBlank()) {
             try {
-                String cleanUrl = targetUrl;
-                if (cleanUrl.startsWith("postgres://")) {
-                    cleanUrl = "postgresql://" + cleanUrl.substring("postgres://".length());
-                }
-                URI dbUri = new URI(cleanUrl);
-                String userInfo = dbUri.getUserInfo();
+                String cleanUrl = targetUrl.trim();
+                String jdbcUrl;
                 String username = "";
                 String password = "";
 
-                if (userInfo != null && userInfo.contains(":")) {
-                    String[] parts = userInfo.split(":");
-                    username = parts[0];
-                    password = parts[1];
+                if (cleanUrl.startsWith("jdbc:postgresql://")) {
+                    jdbcUrl = cleanUrl;
+                } else {
+                    if (cleanUrl.startsWith("postgres://")) {
+                        cleanUrl = "postgresql://" + cleanUrl.substring("postgres://".length());
+                    }
+                    URI dbUri = new URI(cleanUrl);
+                    String userInfo = dbUri.getUserInfo();
+
+                    if (userInfo != null && userInfo.contains(":")) {
+                        String[] parts = userInfo.split(":", 2);
+                        username = parts[0];
+                        password = parts[1];
+                    }
+
+                    String host = dbUri.getHost();
+                    int port = dbUri.getPort() == -1 ? 5432 : dbUri.getPort();
+                    String path = dbUri.getPath();
+                    String query = dbUri.getQuery();
+
+                    jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
+                    if (query != null && !query.isBlank()) {
+                        jdbcUrl += "?" + query;
+                    } else if (host.contains("neon.tech")) {
+                        // Automatically append SSL for Neon PostgreSQL hosted database
+                        jdbcUrl += "?sslmode=require";
+                    }
                 }
 
-                String host = dbUri.getHost();
-                int port = dbUri.getPort() == -1 ? 5432 : dbUri.getPort();
-                String path = dbUri.getPath();
-
-                String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
-
-                DataSource ds = DataSourceBuilder.create()
+                DataSourceBuilder<?> builder = DataSourceBuilder.create()
                         .driverClassName("org.postgresql.Driver")
-                        .url(jdbcUrl)
-                        .username(username)
-                        .password(password)
-                        .build();
+                        .url(jdbcUrl);
+
+                if (!username.isEmpty()) {
+                    builder.username(username).password(password);
+                }
+
+                DataSource ds = builder.build();
 
                 // Test connection
                 try (Connection conn = ds.getConnection()) {

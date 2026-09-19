@@ -292,3 +292,127 @@ textarea{resize:vertical;min-height:90px;}
 .whatsapp-float:hover{transform:scale(1.08);}
 .whatsapp-float svg{width:28px;height:28px;}
 @media (max-width:760px){.whatsapp-float{right:16px;bottom:16px;width:50px;height:50px;}}
+
+/* ==========================================================================
+   Comprehensive Mobile & Tablet Responsive Enhancements
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .wrap {
+    padding: 0 16px;
+  }
+  .pagehead {
+    padding: 24px 0 8px;
+  }
+  .nav {
+    padding: 12px 0;
+  }
+  .brand {
+    font-size: 1.2rem;
+  }
+  .mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--teal);
+    font-weight: 600;
+  }
+  .nav-links {
+    padding: 18px 20px;
+    box-shadow: 0 10px 25px rgba(18,33,31,0.12);
+  }
+
+  /* Touch-friendly buttons and inputs */
+  .btn {
+    min-height: 44px;
+  }
+  input[type=text], input[type=email], input[type=password], input[type=tel], input[type=number], textarea, select {
+    font-size: 16px !important; /* Prevents auto-zoom on iOS safari */
+    padding: 0.8em 0.9em;
+  }
+
+  /* Cart Layout on Mobile */
+  .cart-line {
+    grid-template-columns: 64px 1fr;
+    gap: 12px;
+    position: relative;
+    padding: 14px 0;
+  }
+  .cart-line .qty {
+    grid-column: 2;
+    margin-top: 6px;
+  }
+  .cart-line > div:last-child {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+    text-align: left !important;
+  }
+
+  /* Responsive Tables */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 16px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  .table {
+    min-width: 500px;
+  }
+
+  /* Stats Grid on Mobile */
+  .stat-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 14px 16px;
+  }
+  .stat-card .num {
+    font-size: 1.5rem;
+  }
+
+  /* Modals on Small Screens */
+  .modal {
+    padding: 20px 16px;
+    max-height: 92vh;
+    border-radius: 8px;
+    width: 95%;
+  }
+
+  /* Footer on Mobile */
+  .site-footer {
+    padding: 32px 0 40px;
+  }
+  .footer-grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-row {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+  .hero p.lede {
+    font-size: 1rem;
+  }
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero-cta .btn {
+    width: 100%;
+  }
+}
+
