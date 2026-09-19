@@ -17,7 +17,7 @@ public class Product {
     private String dims;
     private int stock;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String desc;
 
     @ElementCollection(fetch = FetchType.EAGER)
