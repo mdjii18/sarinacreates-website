@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.net.URI;
+import java.sql.Connection;
 
 @Configuration
 public class DatabaseConfig {
@@ -50,8 +51,12 @@ public class DatabaseConfig {
                     if (host != null) {
                         jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
                         if (query != null && !query.isBlank()) {
-                            jdbcUrl += "?" + query;
-                        } else if (host.contains("neon.tech")) {
+                            if (!query.contains("sslmode") && !query.contains("ssl")) {
+                                jdbcUrl += "?" + query + "&sslmode=require";
+                            } else {
+                                jdbcUrl += "?" + query;
+                            }
+                        } else {
                             jdbcUrl += "?sslmode=require";
                         }
                     } else {
@@ -75,30 +80,32 @@ public class DatabaseConfig {
                 hikariConfig.setMaximumPoolSize(10);     // Max concurrent connections
                 hikariConfig.setIdleTimeout(300000);     // 5 minutes idle timeout
                 hikariConfig.setMaxLifetime(600000);     // 10 minutes max connection lifetime
-                hikariConfig.setConnectionTimeout(20000);// 20s connection timeout
+                hikariConfig.setConnectionTimeout(15000);// 15s connection timeout
                 hikariConfig.setValidationTimeout(5000); // 5s validation query timeout
                 hikariConfig.setKeepaliveTime(45000);    // 45s keepalive ping
 
-                System.out.println("Configured PostgreSQL DataSource for JDBC URL: " + jdbcUrl.replaceAll(":.*@", ":***@"));
-                return new HikariDataSource(hikariConfig);
+                String safeUrl = jdbcUrl.replaceAll(":[^/@]+@", ":***@");
+                System.out.println("=== CONFIGURING POSTGRESQL DATA SOURCE ===");
+                System.out.println("JDBC URL: " + safeUrl);
+                System.out.println("DB User : " + username);
+
+                HikariDataSource ds = new HikariDataSource(hikariConfig);
+
+                // Quick diagnostics probe to log exact exception on startup
+                try (Connection conn = ds.getConnection()) {
+                    System.out.println("=== POSTGRESQL CONNECTION SUCCESSFUL! ===");
+                } catch (Exception diagEx) {
+                    System.err.println("=== POSTGRESQL CONNECTION DIAGNOSTIC ERROR ===");
+                    diagEx.printStackTrace();
+                }
+
+                return ds;
             } catch (Exception e) {
                 System.err.println("Failed to parse DATABASE_URL: " + e.getMessage());
             }
         }
 
-        // Try local PostgreSQL or fallback to H2 for local testing
-        String localUrl = System.getProperty("spring.datasource.url", System.getenv("SPRING_DATASOURCE_URL"));
-        if (localUrl != null && !localUrl.isBlank()) {
-            HikariConfig localConfig = new HikariConfig();
-            localConfig.setDriverClassName("org.postgresql.Driver");
-            localConfig.setJdbcUrl(localUrl);
-            localConfig.setUsername(System.getProperty("spring.datasource.username", System.getenv("SPRING_DATASOURCE_USERNAME")));
-            localConfig.setPassword(System.getProperty("spring.datasource.password", System.getenv("SPRING_DATASOURCE_PASSWORD")));
-            localConfig.setConnectionTimeout(5000);
-            return new HikariDataSource(localConfig);
-        }
-
-        System.out.println("No DATABASE_URL set. Initializing H2 in-memory database...");
+        System.out.println("No valid DATABASE_URL environment variable set. Initializing H2 in-memory database...");
         HikariConfig h2Config = new HikariConfig();
         h2Config.setDriverClassName("org.h2.Driver");
         h2Config.setJdbcUrl("jdbc:h2:mem:sarinacreates;DB_CLOSE_DELAY=-1;MODE=PostgreSQL");
