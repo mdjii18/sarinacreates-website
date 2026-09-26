@@ -1,6 +1,7 @@
 package com.sarinacreates.shop.config;
 
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -47,21 +48,31 @@ public class DatabaseConfig {
                     jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
                     if (query != null && !query.isBlank()) {
                         jdbcUrl += "?" + query;
-                    } else if (host.contains("neon.tech")) {
+                    } else if (host != null && host.contains("neon.tech")) {
                         // Automatically append SSL for Neon PostgreSQL hosted database
                         jdbcUrl += "?sslmode=require";
                     }
                 }
 
-                DataSourceBuilder<?> builder = DataSourceBuilder.create()
-                        .driverClassName("org.postgresql.Driver")
-                        .url(jdbcUrl);
+                HikariConfig hikariConfig = new HikariConfig();
+                hikariConfig.setDriverClassName("org.postgresql.Driver");
+                hikariConfig.setJdbcUrl(jdbcUrl);
 
                 if (!username.isEmpty()) {
-                    builder.username(username).password(password);
+                    hikariConfig.setUsername(username);
+                    hikariConfig.setPassword(password);
                 }
 
-                DataSource ds = builder.build();
+                // Serverless PostgreSQL (Neon.tech) Free Tier Optimizations:
+                // Allows Neon DB to auto-suspend after 5 mins of inactivity to stay 100% FREE
+                hikariConfig.setMinimumIdle(0);          // Allow pool to drop to 0 idle connections
+                hikariConfig.setMaximumPoolSize(10);     // Max concurrent connections
+                hikariConfig.setIdleTimeout(240000);     // 4 minutes (closes idle connections before Neon's 5m sleep)
+                hikariConfig.setMaxLifetime(600000);     // 10 minutes max connection lifetime
+                hikariConfig.setConnectionTimeout(30000);// 30s timeout (allows Neon DB ~1s cold-start wakeup time)
+                hikariConfig.setKeepaliveTime(0);        // Disabled keepalive so it doesn't drain free compute hours!
+
+                HikariDataSource ds = new HikariDataSource(hikariConfig);
 
                 // Test connection
                 try (Connection conn = ds.getConnection()) {
@@ -75,12 +86,13 @@ public class DatabaseConfig {
 
         // Try local PostgreSQL configuration
         try {
-            DataSource ds = DataSourceBuilder.create()
-                    .driverClassName("org.postgresql.Driver")
-                    .url(System.getProperty("spring.datasource.url", "jdbc:postgresql://localhost:5432/sarinacreates"))
-                    .username(System.getProperty("spring.datasource.username", "postgres"))
-                    .password(System.getProperty("spring.datasource.password", "postgres"))
-                    .build();
+            HikariConfig localConfig = new HikariConfig();
+            localConfig.setDriverClassName("org.postgresql.Driver");
+            localConfig.setJdbcUrl(System.getProperty("spring.datasource.url", "jdbc:postgresql://localhost:5432/sarinacreates"));
+            localConfig.setUsername(System.getProperty("spring.datasource.username", "postgres"));
+            localConfig.setPassword(System.getProperty("spring.datasource.password", "postgres"));
+            localConfig.setConnectionTimeout(5000);
+            HikariDataSource ds = new HikariDataSource(localConfig);
 
             try (Connection conn = ds.getConnection()) {
                 System.out.println("Successfully connected to local PostgreSQL database.");
@@ -91,11 +103,11 @@ public class DatabaseConfig {
         }
 
         // H2 embedded fallback
-        return DataSourceBuilder.create()
-                .driverClassName("org.h2.Driver")
-                .url("jdbc:h2:mem:sarinacreates;DB_CLOSE_DELAY=-1;MODE=PostgreSQL")
-                .username("sa")
-                .password("")
-                .build();
+        HikariConfig h2Config = new HikariConfig();
+        h2Config.setDriverClassName("org.h2.Driver");
+        h2Config.setJdbcUrl("jdbc:h2:mem:sarinacreates;DB_CLOSE_DELAY=-1;MODE=PostgreSQL");
+        h2Config.setUsername("sa");
+        h2Config.setPassword("");
+        return new HikariDataSource(h2Config);
     }
 }
