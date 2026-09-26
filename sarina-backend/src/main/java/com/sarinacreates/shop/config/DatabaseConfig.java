@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.net.URI;
-import java.sql.Connection;
 
 @Configuration
 public class DatabaseConfig {
@@ -71,46 +70,35 @@ public class DatabaseConfig {
                     hikariConfig.setPassword(password);
                 }
 
-                // Serverless PostgreSQL (Neon.tech) Optimized Pooling:
+                // Serverless PostgreSQL (Neon.tech) Optimized Pooling
                 hikariConfig.setMinimumIdle(1);          // Keep 1 active connection ready
                 hikariConfig.setMaximumPoolSize(10);     // Max concurrent connections
                 hikariConfig.setIdleTimeout(300000);     // 5 minutes idle timeout
                 hikariConfig.setMaxLifetime(600000);     // 10 minutes max connection lifetime
-                hikariConfig.setConnectionTimeout(15000);// 15s connection timeout (never hangs for 4 minutes!)
+                hikariConfig.setConnectionTimeout(20000);// 20s connection timeout
                 hikariConfig.setValidationTimeout(5000); // 5s validation query timeout
                 hikariConfig.setKeepaliveTime(45000);    // 45s keepalive ping
 
-                HikariDataSource ds = new HikariDataSource(hikariConfig);
-
-                // Test connection
-                try (Connection conn = ds.getConnection()) {
-                    System.out.println("Successfully connected to PostgreSQL database via DATABASE_URL.");
-                    return ds;
-                }
+                System.out.println("Configured PostgreSQL DataSource for JDBC URL: " + jdbcUrl.replaceAll(":.*@", ":***@"));
+                return new HikariDataSource(hikariConfig);
             } catch (Exception e) {
-                System.err.println("DATABASE_URL connection test failed: " + e.getMessage());
+                System.err.println("Failed to parse DATABASE_URL: " + e.getMessage());
             }
         }
 
-        // Try local PostgreSQL configuration
-        try {
+        // Try local PostgreSQL or fallback to H2 for local testing
+        String localUrl = System.getProperty("spring.datasource.url", System.getenv("SPRING_DATASOURCE_URL"));
+        if (localUrl != null && !localUrl.isBlank()) {
             HikariConfig localConfig = new HikariConfig();
             localConfig.setDriverClassName("org.postgresql.Driver");
-            localConfig.setJdbcUrl(System.getProperty("spring.datasource.url", "jdbc:postgresql://localhost:5432/sarinacreates"));
-            localConfig.setUsername(System.getProperty("spring.datasource.username", "postgres"));
-            localConfig.setPassword(System.getProperty("spring.datasource.password", "postgres"));
+            localConfig.setJdbcUrl(localUrl);
+            localConfig.setUsername(System.getProperty("spring.datasource.username", System.getenv("SPRING_DATASOURCE_USERNAME")));
+            localConfig.setPassword(System.getProperty("spring.datasource.password", System.getenv("SPRING_DATASOURCE_PASSWORD")));
             localConfig.setConnectionTimeout(5000);
-            HikariDataSource ds = new HikariDataSource(localConfig);
-
-            try (Connection conn = ds.getConnection()) {
-                System.out.println("Successfully connected to local PostgreSQL database.");
-                return ds;
-            }
-        } catch (Exception e) {
-            System.out.println("PostgreSQL unavailable locally. Falling back to H2 in-memory database for local testing...");
+            return new HikariDataSource(localConfig);
         }
 
-        // H2 embedded fallback
+        System.out.println("No DATABASE_URL set. Initializing H2 in-memory database...");
         HikariConfig h2Config = new HikariConfig();
         h2Config.setDriverClassName("org.h2.Driver");
         h2Config.setJdbcUrl("jdbc:h2:mem:sarinacreates;DB_CLOSE_DELAY=-1;MODE=PostgreSQL");
