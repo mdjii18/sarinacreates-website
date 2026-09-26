@@ -21,17 +21,20 @@ public class DatabaseConfig {
         if (targetUrl != null && !targetUrl.isBlank()) {
             try {
                 String cleanUrl = targetUrl.trim();
+                String parseUrl = cleanUrl;
+                if (parseUrl.startsWith("jdbc:")) {
+                    parseUrl = parseUrl.substring("jdbc:".length());
+                }
+                if (parseUrl.startsWith("postgres://")) {
+                    parseUrl = "postgresql://" + parseUrl.substring("postgres://".length());
+                }
+
                 String jdbcUrl;
                 String username = "";
                 String password = "";
 
-                if (cleanUrl.startsWith("jdbc:postgresql://")) {
-                    jdbcUrl = cleanUrl;
-                } else {
-                    if (cleanUrl.startsWith("postgres://")) {
-                        cleanUrl = "postgresql://" + cleanUrl.substring("postgres://".length());
-                    }
-                    URI dbUri = new URI(cleanUrl);
+                try {
+                    URI dbUri = new URI(parseUrl);
                     String userInfo = dbUri.getUserInfo();
 
                     if (userInfo != null && userInfo.contains(":")) {
@@ -45,32 +48,37 @@ public class DatabaseConfig {
                     String path = dbUri.getPath();
                     String query = dbUri.getQuery();
 
-                    jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
-                    if (query != null && !query.isBlank()) {
-                        jdbcUrl += "?" + query;
-                    } else if (host != null && host.contains("neon.tech")) {
-                        // Automatically append SSL for Neon PostgreSQL hosted database
-                        jdbcUrl += "?sslmode=require";
+                    if (host != null) {
+                        jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
+                        if (query != null && !query.isBlank()) {
+                            jdbcUrl += "?" + query;
+                        } else if (host.contains("neon.tech")) {
+                            jdbcUrl += "?sslmode=require";
+                        }
+                    } else {
+                        jdbcUrl = cleanUrl.startsWith("jdbc:") ? cleanUrl : "jdbc:" + cleanUrl;
                     }
+                } catch (Exception e) {
+                    jdbcUrl = cleanUrl.startsWith("jdbc:") ? cleanUrl : "jdbc:" + cleanUrl;
                 }
 
                 HikariConfig hikariConfig = new HikariConfig();
                 hikariConfig.setDriverClassName("org.postgresql.Driver");
                 hikariConfig.setJdbcUrl(jdbcUrl);
 
-                if (!username.isEmpty()) {
+                if (username != null && !username.isEmpty()) {
                     hikariConfig.setUsername(username);
                     hikariConfig.setPassword(password);
                 }
 
-                // Serverless PostgreSQL (Neon.tech) Free Tier Optimizations:
-                // Allows Neon DB to auto-suspend after 5 mins of inactivity to stay 100% FREE
-                hikariConfig.setMinimumIdle(0);          // Allow pool to drop to 0 idle connections
+                // Serverless PostgreSQL (Neon.tech) Optimized Pooling:
+                hikariConfig.setMinimumIdle(1);          // Keep 1 active connection ready
                 hikariConfig.setMaximumPoolSize(10);     // Max concurrent connections
-                hikariConfig.setIdleTimeout(240000);     // 4 minutes (closes idle connections before Neon's 5m sleep)
+                hikariConfig.setIdleTimeout(300000);     // 5 minutes idle timeout
                 hikariConfig.setMaxLifetime(600000);     // 10 minutes max connection lifetime
-                hikariConfig.setConnectionTimeout(30000);// 30s timeout (allows Neon DB ~1s cold-start wakeup time)
-                hikariConfig.setKeepaliveTime(0);        // Disabled keepalive so it doesn't drain free compute hours!
+                hikariConfig.setConnectionTimeout(15000);// 15s connection timeout (never hangs for 4 minutes!)
+                hikariConfig.setValidationTimeout(5000); // 5s validation query timeout
+                hikariConfig.setKeepaliveTime(45000);    // 45s keepalive ping
 
                 HikariDataSource ds = new HikariDataSource(hikariConfig);
 

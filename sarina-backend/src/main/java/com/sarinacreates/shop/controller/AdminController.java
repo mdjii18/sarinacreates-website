@@ -31,12 +31,28 @@ public class AdminController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
         String password = body != null ? body.get("password") : null;
-        Optional<AdminUser> adminOpt = adminRepository.findById("admin");
-        if (adminOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Incorrect password"));
+        if (password != null) {
+            password = password.trim();
         }
 
-        AdminUser admin = adminOpt.get();
+        Optional<AdminUser> adminOpt = adminRepository.findById("admin");
+        AdminUser admin;
+        if (adminOpt.isEmpty()) {
+            String defaultPassword = System.getenv("ADMIN_PASSWORD");
+            if (defaultPassword == null || defaultPassword.isBlank()) {
+                defaultPassword = "sarina2026";
+            }
+            admin = new AdminUser(
+                    "admin",
+                    "sarinaquadri71@gmail.com",
+                    SecurityUtils.sha256(defaultPassword),
+                    new java.util.ArrayList<>()
+            );
+            adminRepository.save(admin);
+        } else {
+            admin = adminOpt.get();
+        }
+
         if (password == null || !SecurityUtils.sha256(password).equalsIgnoreCase(admin.getPasswordHash())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Incorrect password"));
         }
