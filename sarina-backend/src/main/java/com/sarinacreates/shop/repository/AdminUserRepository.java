@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AdminUserRepository extends JpaRepository<AdminUser, String> {
-    Optional<AdminUser> findBySessionsContaining(String token);
+    Optional<AdminUser> findBySessionsStrContaining(String token);
 }

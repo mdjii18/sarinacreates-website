@@ -31,7 +31,7 @@ public class ProductController {
             return false;
         }
         String token = authHeader.substring(7);
-        return adminRepository.findBySessionsContaining(token).isPresent();
+        return adminRepository.findBySessionsStrContaining(token).isPresent();
     }
 
     @GetMapping

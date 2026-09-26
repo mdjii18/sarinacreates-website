@@ -14,9 +14,8 @@ public class AdminUser {
     private String email;
     private String passwordHash;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "admin_sessions", joinColumns = @JoinColumn(name = "admin_id"))
-    private List<String> sessions = new ArrayList<>();
+    @Column(name = "sessions", columnDefinition = "TEXT")
+    private String sessionsStr = "";
 
     public AdminUser() {}
 
@@ -24,7 +23,7 @@ public class AdminUser {
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.sessions = sessions != null ? sessions : new ArrayList<>();
+        setSessions(sessions);
     }
 
     public String getId() { return id; }
@@ -36,6 +35,18 @@ public class AdminUser {
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
-    public List<String> getSessions() { return sessions; }
-    public void setSessions(List<String> sessions) { this.sessions = sessions; }
+    public List<String> getSessions() {
+        if (sessionsStr == null || sessionsStr.isBlank()) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(List.of(sessionsStr.split(",")));
+    }
+
+    public void setSessions(List<String> sessions) {
+        if (sessions == null || sessions.isEmpty()) {
+            this.sessionsStr = "";
+        } else {
+            this.sessionsStr = String.join(",", sessions);
+        }
+    }
 }
