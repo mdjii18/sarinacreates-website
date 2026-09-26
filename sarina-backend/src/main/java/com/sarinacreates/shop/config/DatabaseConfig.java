@@ -48,13 +48,35 @@ public class DatabaseConfig {
                     String path = dbUri.getPath();
                     String query = dbUri.getQuery();
 
+                    // Parse user and password from query parameters if not present in userInfo
+                    if (query != null && !query.isBlank()) {
+                        for (String param : query.split("&")) {
+                            String[] kv = param.split("=", 2);
+                            if (kv.length == 2) {
+                                String key = kv[0].trim();
+                                String val = kv[1].trim();
+                                if ((key.equalsIgnoreCase("user") || key.equalsIgnoreCase("username")) && username.isEmpty()) {
+                                    username = val;
+                                } else if (key.equalsIgnoreCase("password") && password.isEmpty()) {
+                                    password = val;
+                                }
+                            }
+                        }
+                    }
+
                     if (host != null) {
                         jdbcUrl = "jdbc:postgresql://" + host + ":" + port + path;
                         if (query != null && !query.isBlank()) {
-                            if (!query.contains("sslmode") && !query.contains("ssl")) {
-                                jdbcUrl += "?" + query + "&sslmode=require";
+                            // Strip channelBinding / channel_binding from query string for PgBouncer compatibility
+                            String cleanQuery = query.replaceAll("(?i)&?channelBinding=[^&]*", "")
+                                                     .replaceAll("(?i)&?channel_binding=[^&]*", "");
+                            if (cleanQuery.startsWith("&")) {
+                                cleanQuery = cleanQuery.substring(1);
+                            }
+                            if (!cleanQuery.contains("sslmode") && !cleanQuery.contains("ssl")) {
+                                jdbcUrl += "?" + cleanQuery + (cleanQuery.isBlank() ? "sslmode=require" : "&sslmode=require");
                             } else {
-                                jdbcUrl += "?" + query;
+                                jdbcUrl += (cleanQuery.isBlank() ? "" : "?" + cleanQuery);
                             }
                         } else {
                             jdbcUrl += "?sslmode=require";
@@ -65,6 +87,10 @@ public class DatabaseConfig {
                 } catch (Exception e) {
                     jdbcUrl = cleanUrl.startsWith("jdbc:") ? cleanUrl : "jdbc:" + cleanUrl;
                 }
+
+                // Strip channelBinding if present in raw string fallback
+                jdbcUrl = jdbcUrl.replaceAll("(?i)&?channelBinding=[^&]*", "")
+                                 .replaceAll("(?i)&?channel_binding=[^&]*", "");
 
                 HikariConfig hikariConfig = new HikariConfig();
                 hikariConfig.setDriverClassName("org.postgresql.Driver");
@@ -80,11 +106,11 @@ public class DatabaseConfig {
                 hikariConfig.setMaximumPoolSize(10);     // Max concurrent connections
                 hikariConfig.setIdleTimeout(300000);     // 5 minutes idle timeout
                 hikariConfig.setMaxLifetime(600000);     // 10 minutes max connection lifetime
-                hikariConfig.setConnectionTimeout(15000);// 15s connection timeout
+                hikariConfig.setConnectionTimeout(30000);// 30s connection timeout
                 hikariConfig.setValidationTimeout(5000); // 5s validation query timeout
                 hikariConfig.setKeepaliveTime(45000);    // 45s keepalive ping
 
-                String safeUrl = jdbcUrl.replaceAll(":[^/@]+@", ":***@");
+                String safeUrl = jdbcUrl.replaceAll(":[^/@]+@", ":***@").replaceAll("password=[^&]*", "password=***");
                 System.out.println("=== CONFIGURING POSTGRESQL DATA SOURCE ===");
                 System.out.println("JDBC URL: " + safeUrl);
                 System.out.println("DB User : " + username);
