@@ -2,6 +2,7 @@ package com.sarinacreates.shop.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sarinacreates.shop.dto.ProductSummary;
 import com.sarinacreates.shop.model.AdminUser;
 import com.sarinacreates.shop.model.Product;
 import com.sarinacreates.shop.repository.AdminUserRepository;
@@ -39,6 +40,13 @@ public class ProductController {
         return ResponseEntity.ok(productRepository.findAllSortedByTs());
     }
 
+    // GET /api/products/count — ultra-fast count for admin overview
+    @GetMapping("/count")
+    public ResponseEntity<?> getProductCount() {
+        return ResponseEntity.ok(Map.of("count", productRepository.count()));
+    }
+
+    // GET /api/products/:id — returns full product WITH images (used on product detail page only)
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable String id) {
         Optional<Product> productOpt = productRepository.findById(id);

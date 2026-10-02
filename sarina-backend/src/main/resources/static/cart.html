@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Your cart — sarinacreates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -61,7 +64,7 @@
           <div class="dims">${l.product.dims}</div>
         </div>
         <div class="qty">
-          <button type="button" data-dec="${l.id}">−</button>
+          <button type="button" data-dec="${l.id}">-</button>
           <input type="text" value="${l.qty}" readonly>
           <button type="button" data-inc="${l.id}" ${l.qty >= l.product.stock ? 'disabled' : ''}>+</button>
         </div>
@@ -71,7 +74,8 @@
         </div>
       </div>`).join('');
 
-    const total = await SC.cartTotal();
+    // Reuse already-fetched lines for total (no second network call)
+    const total = await SC.cartTotal(lines);
     summaryEl.innerHTML = `
       <div class="summary-row"><span>Subtotal</span><span>${SC.money(total)}</span></div>
       <div class="summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
@@ -81,14 +85,14 @@
 
     linesEl.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', async () => {
       const id = b.getAttribute('data-inc');
-      const line = SC.getCart().find(l => l.id === id);
-      const product = await SC.getProduct(id);
-      SC.updateCartQty(id, Math.min(product.stock, line.qty + 1));
+      const line = lines.find(l => l.id === id);
+      // Use stock from already-loaded product data, no extra fetch
+      SC.updateCartQty(id, Math.min(line.product.stock, line.qty + 1));
       SC.updateNav(); render();
     }));
     linesEl.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => {
       const id = b.getAttribute('data-dec');
-      const line = SC.getCart().find(l => l.id === id);
+      const line = lines.find(l => l.id === id);
       SC.updateCartQty(id, line.qty - 1);
       SC.updateNav(); render();
     }));
@@ -96,7 +100,7 @@
       SC.removeFromCart(b.getAttribute('data-remove'));
       SC.updateNav(); render();
     }));
-    SC.renderTilesOnPage();
+    SC.renderTilesOnPage(lines.map(l => l.product));
   }
   document.addEventListener('DOMContentLoaded', render);
 </script>

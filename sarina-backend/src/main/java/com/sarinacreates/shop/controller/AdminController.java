@@ -39,17 +39,16 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Password is required"));
         }
 
-        String defaultPass = "sarina2026";
         String inputHash = SecurityUtils.sha256(password);
-        String defaultHash = SecurityUtils.sha256(defaultPass);
 
         Optional<AdminUser> adminOpt = adminRepository.findById("admin");
         AdminUser admin;
         if (adminOpt.isEmpty()) {
+            String defaultPass = "sarina2026";
             admin = new AdminUser(
                     "admin",
                     "sarinaquadri71@gmail.com",
-                    defaultHash,
+                    SecurityUtils.sha256(defaultPass),
                     new java.util.ArrayList<>()
             );
             adminRepository.save(admin);
@@ -57,13 +56,8 @@ public class AdminController {
             admin = adminOpt.get();
         }
 
-        boolean matches = inputHash.equalsIgnoreCase(admin.getPasswordHash()) || inputHash.equalsIgnoreCase(defaultHash);
-        if (!matches) {
+        if (!inputHash.equalsIgnoreCase(admin.getPasswordHash())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Incorrect password"));
-        }
-
-        if (inputHash.equalsIgnoreCase(defaultHash) && !inputHash.equalsIgnoreCase(admin.getPasswordHash())) {
-            admin.setPasswordHash(defaultHash);
         }
 
         String token = SecurityUtils.generateToken();

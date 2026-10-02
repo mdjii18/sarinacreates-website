@@ -48,6 +48,14 @@ const SC = (() => {
     if (!res.ok) return null;
     return res.json();
   }
+
+  // getProductCount() — ultra-fast count for admin overview.
+  async function getProductCount() {
+    const res = await fetch("/api/products/count");
+    if (!res.ok) return 0;
+    const data = await res.json();
+    return data.count || 0;
+  }
   // fields: {id, name, category, price, dims, stock, desc, palette:[a,b,c], angle}
   // newImageBlobs: array of {blob, filename} to upload
   // existingImages: array of image URLs already on the product to keep (editing only)
@@ -139,10 +147,11 @@ const SC = (() => {
       <div class="sheen"></div>`;
     el.style.background = b;
   }
-  async function renderTilesOnPage() {
+  async function renderTilesOnPage(preloadedProducts) {
+    // Check for elements BEFORE making any network call (avoids wasted fetches on login/account/order pages)
     const els = document.querySelectorAll("[data-art]");
     if (!els.length) return;
-    const products = await getProducts();
+    const products = preloadedProducts || await getProducts();
     els.forEach(el => {
       const id = el.getAttribute("data-art");
       paintTile(el, products.find(p => p.id === id));
@@ -183,9 +192,9 @@ const SC = (() => {
   // ---------- cart (local — cart contents are per-device/per-visitor) ----------
   function getCart() { return read(KEYS.cart, []); }
   function cartCount() { return getCart().reduce((n, l) => n + l.qty, 0); }
-  async function addToCart(id, qty = 1) {
-    const product = await getProduct(id);
-    const stock = product ? product.stock : Infinity;
+  async function addToCart(id, knownStock, qty = 1) {
+    // knownStock can be passed in to avoid an extra network fetch
+    const stock = (knownStock != null) ? knownStock : (await getProduct(id))?.stock ?? Infinity;
     const cart = getCart();
     const line = cart.find(l => l.id === id);
     if (line) line.qty = Math.min(stock, line.qty + qty);
@@ -201,11 +210,12 @@ const SC = (() => {
   function removeFromCart(id) { write(KEYS.cart, getCart().filter(l => l.id !== id)); }
   function clearCart() { write(KEYS.cart, []); }
   async function cartLines() {
-    const products = await getProducts();
+    const products = await getProducts(); // uses cache — no extra network call
     return getCart().map(l => ({ ...l, product: products.find(p => p.id === l.id) })).filter(l => l.product);
   }
-  async function cartTotal() {
-    const lines = await cartLines();
+  // cartTotal accepts pre-fetched lines to avoid double-fetching products
+  async function cartTotal(preloadedLines) {
+    const lines = preloadedLines || await cartLines();
     return lines.reduce((sum, l) => sum + l.product.price * l.qty, 0);
   }
 
@@ -374,7 +384,8 @@ const SC = (() => {
   });
 
   return {
-    getProducts, getProduct, saveProduct, deleteProduct, paintTile, renderTilesOnPage, resizeImage,
+    getProducts, getProduct, getProductCount, saveProduct, deleteProduct,
+    paintTile, renderTilesOnPage, resizeImage,
     signup, login, logout, currentUser, getSession,
     getCart, cartCount, addToCart, updateCartQty, removeFromCart, clearCart, cartLines, cartTotal,
     getOrders, getOrder, createOrder, setOrderStatus, ordersForEmail,
