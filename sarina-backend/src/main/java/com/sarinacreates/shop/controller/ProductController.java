@@ -2,7 +2,6 @@ package com.sarinacreates.shop.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sarinacreates.shop.dto.ProductSummary;
 import com.sarinacreates.shop.model.AdminUser;
 import com.sarinacreates.shop.model.Product;
 import com.sarinacreates.shop.repository.AdminUserRepository;
