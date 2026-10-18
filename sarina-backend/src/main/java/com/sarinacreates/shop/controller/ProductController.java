@@ -21,6 +21,9 @@ public class ProductController {
     private final AdminUserRepository adminRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    // In-memory cache for ultra-fast instant responses (0ms instead of 12s remote DB query)
+    private volatile List<Product> cachedProducts = null;
+
     public ProductController(ProductRepository productRepository, AdminUserRepository adminRepository) {
         this.productRepository = productRepository;
         this.adminRepository = adminRepository;
@@ -36,7 +39,14 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productRepository.findAllSortedByTs());
+        if (cachedProducts == null) {
+            synchronized (this) {
+                if (cachedProducts == null) {
+                    cachedProducts = productRepository.findAllSortedByTs();
+                }
+            }
+        }
+        return ResponseEntity.ok(cachedProducts);
     }
 
     // GET /api/products/count — ultra-fast count for admin overview
@@ -126,6 +136,9 @@ public class ProductController {
         );
 
         productRepository.save(product);
+        synchronized (this) {
+            cachedProducts = null;
+        }
         return ResponseEntity.ok(product);
     }
 
@@ -139,6 +152,9 @@ public class ProductController {
         }
 
         productRepository.deleteById(id);
+        synchronized (this) {
+            cachedProducts = null;
+        }
         return ResponseEntity.ok(Map.of("ok", true));
     }
 }

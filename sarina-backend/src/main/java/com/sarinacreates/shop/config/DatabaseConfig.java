@@ -16,7 +16,12 @@ public class DatabaseConfig {
     public DataSource dataSource() {
         String databaseUrl = System.getenv("DATABASE_URL");
         String internalUrl = System.getenv("INTERNAL_DATABASE_URL");
-        String targetUrl = databaseUrl != null && !databaseUrl.isBlank() ? databaseUrl : internalUrl;
+        String springDsUrl = System.getenv("SPRING_DATASOURCE_URL");
+        String propUrl = System.getProperty("DATABASE_URL");
+
+        String targetUrl = (databaseUrl != null && !databaseUrl.isBlank()) ? databaseUrl :
+                           (internalUrl != null && !internalUrl.isBlank()) ? internalUrl :
+                           (springDsUrl != null && !springDsUrl.isBlank()) ? springDsUrl : propUrl;
 
         if (targetUrl != null && !targetUrl.isBlank()) {
             try {

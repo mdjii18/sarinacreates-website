@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sarinacreates — hand-poured resin artwork</title>
-<meta name="description" content="Hand-poured resin wall art, coasters and homeware from sarinacreates.">
+<title>sarinacreates — Bespoke Resin Keepsakes & Artwork</title>
+<meta name="description" content="Preserving love stories in crystal resin: wedding varmala flower preservation, couple frames, anniversary plaques, and coastal scenery art. Hand-poured with love by Sarina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -17,8 +17,11 @@
     <a href="index.html" class="brand">sarina<span class="dot">·</span>creates</a>
     <button class="mobile-toggle">Menu</button>
     <nav class="nav-links">
-      <a href="shop.html">Shop</a>
-      <a href="index.html#process">Process</a>
+      <a href="#custom-builder">Custom Keepsake</a>
+      <a href="shop.html">Shop Pieces</a>
+      <a href="#occasions">Occasions</a>
+      <a href="#process">The Process</a>
+      <a href="#faqs">FAQs</a>
       <a href="account.html" data-auth-link class="icon-link">Log in</a>
       <a href="cart.html" class="icon-link">Cart <span class="cart-count" data-cart-count>0</span></a>
     </nav>
@@ -26,49 +29,259 @@
 </header>
 
 <main>
+  <!-- Romantic Hero Section -->
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="eyebrow">Hand-poured in small batches</span>
-        <h1>Resin, poured<br><em>one layer</em> at a time.</h1>
-        <p class="lede">Wall pieces, coasters and homeware cast by hand and built up over days, not minutes. No two pours are identical — that's the point.</p>
+        <div class="hero-pill"><span class="heart">♥</span> Handcrafted Keepsakes · Preserving Love Stories</div>
+        <h1>Turning Your Most Precious Moments into <em>Eternal Resin Art</em>.</h1>
+        <p class="lede">Bespoke wedding varmala & bouquet preservation, couple milestone frames, anniversary plaques, and calming ocean scenery — hand-poured layer by layer.</p>
         <div class="hero-cta">
-          <a href="shop.html" class="btn btn-primary">Browse the shop</a>
-          <a href="#process" class="btn btn-ghost">How it's made</a>
+          <a href="#custom-builder" class="btn btn-romantic">✨ Design Your Custom Keepsake</a>
+          <a href="shop.html" class="btn btn-ghost">Browse Studio Gallery</a>
         </div>
       </div>
-      <div class="hero-stage art-tile" data-art="p3"></div>
+      <div class="hero-stage">
+        <img class="hero-photo" src="images/hero-keepsake.jpg" alt="sarina·creates bespoke floral resin keepsake — Every petal holds a memory, we make it eternal.">
+        <div class="sheen"></div>
+      </div>
     </div>
   </section>
 
+  <!-- Occasions Showcase -->
+  <section id="occasions" style="padding-top:20px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Artisan Collections</span>
+          <h2>Crafted for Life’s Most Meaningful Milestones</h2>
+        </div>
+        <p style="max-width:40ch;color:#5D4B53;margin:0;">Every creation is custom made to preserve emotions, real flowers, and memories that last a lifetime.</p>
+      </div>
+
+      <div class="occasion-grid">
+        <div class="occasion-card">
+          <div class="icon-wrap">💍</div>
+          <h3>Wedding & Varmala</h3>
+          <p>Preserve bridal bouquets, wedding varmalas, and engagement florals in crystal clear resin blocks or wall clocks.</p>
+          <a href="#custom-builder" class="tag-link" data-set-occasion="Wedding Flower Keepsake">Design Wedding Art →</a>
+        </div>
+
+        <div class="occasion-card">
+          <div class="icon-wrap">💖</div>
+          <h3>Couples & Milestones</h3>
+          <p>Couple portraits, anniversary dates, and wedding vows encased with gold foil, dried rose petals, and shimmering resin.</p>
+          <a href="#custom-builder" class="tag-link" data-set-occasion="Couple & Anniversary">Create Couple Piece →</a>
+        </div>
+
+        <div class="occasion-card">
+          <div class="icon-wrap">🌊</div>
+          <h3>Ocean & Scenery</h3>
+          <p>Multi-layered ocean waves, shoreline sand, and deep coastal hues poured into statement wall art and scenic clocks.</p>
+          <a href="#custom-builder" class="tag-link" data-set-occasion="Ocean Scenery Clock">Craft Ocean Scenery →</a>
+        </div>
+
+        <div class="occasion-card">
+          <div class="icon-wrap">✨</div>
+          <h3>Luxury Homeware</h3>
+          <p>Bespoke geode vanity trays, personalized coaster sets, and gold-rimmed nameplates created for luxury gifting.</p>
+          <a href="#custom-builder" class="tag-link" data-set-occasion="Bespoke Homeware">Custom Homeware →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Custom Keepsake Builder (Feature A) -->
+  <section id="custom-builder" class="builder-section">
+    <div class="wrap">
+      <div class="section-head" style="text-align:center;justify-content:center;margin-bottom:44px;">
+        <div>
+          <span class="eyebrow">Interactive Atelier</span>
+          <h2 style="font-size:2.3rem;">Design Your Dream Resin Keepsake</h2>
+          <p style="max-width:54ch;margin:10px auto 0;color:#5D4B53;">Choose your style, colors, and personalization below. Get an instant preview and chat directly with Sarina to bring it to life.</p>
+        </div>
+      </div>
+
+      <div class="builder-wrap">
+        <!-- Form Controls -->
+        <div class="builder-panel">
+          <!-- Step 1: Occasion -->
+          <div class="builder-step-title"><span class="builder-step-num">1</span> Choose the Occasion / Purpose</div>
+          <div class="choice-grid" id="occasion-choices">
+            <button type="button" class="choice-btn active" data-val="Wedding Flower Keepsake"><span class="emoji">💍</span><span>Wedding / Varmala</span></button>
+            <button type="button" class="choice-btn" data-val="Couple & Anniversary"><span class="emoji">💖</span><span>Couple Anniversary</span></button>
+            <button type="button" class="choice-btn" data-val="Ocean Scenery Clock"><span class="emoji">🌊</span><span>Ocean Scenery</span></button>
+            <button type="button" class="choice-btn" data-val="Luxury Gift / Home"><span class="emoji">✨</span><span>Gift / Home Decor</span></button>
+          </div>
+
+          <!-- Step 2: Shape & Base -->
+          <div class="builder-step-title"><span class="builder-step-num">2</span> Select Shape & Base Item</div>
+          <div class="choice-grid" id="shape-choices">
+            <button type="button" class="choice-btn active" data-val="Heart Keepsake Plaque (8–10 in)"><span class="emoji">🤍</span><span>Heart Plaque</span></button>
+            <button type="button" class="choice-btn" data-val="Round Resin Wall Clock (12–16 in)"><span class="emoji">🕰️</span><span>Wall Clock</span></button>
+            <button type="button" class="choice-btn" data-val="Floral Preservation Cube / Block"><span class="emoji">🧊</span><span>Flower Cube</span></button>
+            <button type="button" class="choice-btn" data-val="Couple Photo Frame"><span class="emoji">🖼️</span><span>Photo Frame</span></button>
+            <button type="button" class="choice-btn" data-val="Geode Serving Tray"><span class="emoji">✨</span><span>Geode Tray</span></button>
+          </div>
+
+          <!-- Step 3: Color Palette Theme -->
+          <div class="builder-step-title"><span class="builder-step-num">3</span> Color Theme & Accents</div>
+          <div class="choice-grid" id="theme-choices">
+            <button type="button" class="choice-btn active" data-val="Rose Gold & Blush Cream (Romantic)"><span class="emoji">🌸</span><span>Blush & Rose Gold</span></button>
+            <button type="button" class="choice-btn" data-val="Champagne Gold & Emerald (Luxury)"><span class="emoji">🌿</span><span>Gold & Emerald</span></button>
+            <button type="button" class="choice-btn" data-val="Ocean Turquoise & Sandy White"><span class="emoji">🌊</span><span>Ocean & Sand</span></button>
+            <button type="button" class="choice-btn" data-val="Royal Wine & Gold Leaf"><span class="emoji">🍷</span><span>Royal Wine & Gold</span></button>
+          </div>
+
+          <!-- Step 4: Personalization -->
+          <div class="builder-step-title"><span class="builder-step-num">4</span> Names, Dates & Special Details</div>
+          <div class="field">
+            <label for="custom-names">Names or Couple Initials</label>
+            <input type="text" id="custom-names" placeholder="e.g. Rahul & Priya" value="Aarav & Meera">
+          </div>
+          <div class="field">
+            <label for="custom-date">Special Date / Year</label>
+            <input type="text" id="custom-date" placeholder="e.g. 14th February 2025" value="14.02.2025">
+          </div>
+          <div class="field">
+            <label for="custom-notes">Floral, Picture, or Custom Details</label>
+            <textarea id="custom-notes" placeholder="e.g. We want to preserve our actual wedding varmala rose petals with gold flakes and roman clock numbers."></textarea>
+          </div>
+        </div>
+
+        <!-- Live Preview Summary Card -->
+        <div class="builder-preview-card">
+          <span class="preview-badge">Custom Order Preview</span>
+          <h3 style="margin:0 0 6px;font-size:1.4rem;" id="preview-heading">Wedding Keepsake Heart</h3>
+          <p style="color:#5D4B53;font-size:.88rem;margin:0 0 16px;">Handcrafted to order with high-grade UV-resistant crystal resin.</p>
+
+          <ul class="preview-summary-list">
+            <li><span class="lbl">Occasion:</span><span class="val" id="prev-occasion">Wedding Flower Keepsake</span></li>
+            <li><span class="lbl">Item & Shape:</span><span class="val" id="prev-shape">Heart Keepsake Plaque</span></li>
+            <li><span class="lbl">Color Theme:</span><span class="val" id="prev-theme">Blush & Rose Gold</span></li>
+            <li><span class="lbl">Personalization:</span><span class="val" id="prev-names">Aarav & Meera</span></li>
+            <li><span class="lbl">Date:</span><span class="val" id="prev-date">14.02.2025</span></li>
+          </ul>
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <a id="whatsapp-order-btn" class="btn btn-romantic btn-block" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-right:4px;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.02h-.01a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.36c0-4.53 3.69-8.22 8.24-8.22 2.2 0 4.27.86 5.82 2.42a8.17 8.17 0 0 1 2.41 5.81c0 4.54-3.69 8.2-8.23 8.2Zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.22.89 2.41 1.02 2.57.12.17 1.75 2.67 4.24 3.75.59.26 1.06.41 1.42.53.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.23-.17-.48-.29Z"/></svg>
+              Chat & Order via WhatsApp
+            </a>
+            <a id="email-order-btn" class="btn btn-ghost btn-block" href="#">
+              ✉️ Email Request to Studio
+            </a>
+          </div>
+
+          <p class="hint" style="text-align:center;margin:16px 0 0;font-size:.76rem;">Sarina personally reviews every custom request to ensure perfect craftsmanship and provide an exact quote.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ready-Made Studio Collection -->
   <section>
     <div class="wrap">
       <div class="section-head">
-        <h2>Currently in the studio</h2>
-        <a href="shop.html" class="btn btn-ghost btn-sm">View all pieces</a>
+        <div>
+          <span class="eyebrow">Ready to Ship</span>
+          <h2>Currently in the Studio</h2>
+        </div>
+        <a href="shop.html" class="btn btn-ghost btn-sm">View All Pieces →</a>
       </div>
       <div class="grid" id="featured"></div>
     </div>
   </section>
 
-  <section id="process">
+  <!-- The Process Timeline -->
+  <section id="process" style="background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
     <div class="wrap">
-      <div class="section-head"><h2>How a piece gets made</h2></div>
-      <div class="grid">
+      <div class="section-head">
         <div>
-          <span class="eyebrow">Mix</span>
-          <h3>Colour, by hand</h3>
-          <p style="color:#3a4a45;">Each pigment is mixed to a small test batch first — resin shifts colour slightly as it cures, so the mix is never a guess.</p>
+          <span class="eyebrow">Handmade With Dedication</span>
+          <h2>The Journey of Your Custom Piece</h2>
         </div>
-        <div>
-          <span class="eyebrow">Pour</span>
-          <h3>Layer by layer</h3>
-          <p style="color:#3a4a45;">Wall pieces are built in multiple thin pours rather than one thick one, which is what gives them real depth once cured.</p>
+        <p style="max-width:44ch;color:#5D4B53;margin:0;">Resin art takes patience and passion. Each piece undergoes days of meticulous layering and curing.</p>
+      </div>
+
+      <div class="timeline-grid">
+        <div class="timeline-card">
+          <div class="step-count">01</div>
+          <h4>Share Your Story</h4>
+          <p>Tell us your occasion, preferred colors, or courier your wedding flowers / keepsake photos directly to Sarina's studio.</p>
         </div>
+        <div class="timeline-card">
+          <div class="step-count">02</div>
+          <h4>Floral & Color Prep</h4>
+          <p>Real flowers are preserved with specialized silica drying techniques. Pigments and metallic flakes are hand-mixed for rich color harmony.</p>
+        </div>
+        <div class="timeline-card">
+          <div class="step-count">03</div>
+          <h4>Multi-Layer Pour</h4>
+          <p>Poured in multiple micro-layers over 5 to 7 days to eliminate air bubbles and create profound optical glass depth.</p>
+        </div>
+        <div class="timeline-card">
+          <div class="step-count">04</div>
+          <h4>Hand-Polished & Gifted</h4>
+          <p>Every piece is wet-sanded, diamond polished, and safely gift-packaged ready to adorn your home or be gifted.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Love From Couples Testimonials -->
+  <section style="padding:70px 0;">
+    <div class="wrap">
+      <div class="section-head" style="text-align:center;justify-content:center;margin-bottom:40px;">
         <div>
-          <span class="eyebrow">Cure</span>
-          <h3>Days, not hours</h3>
-          <p style="color:#3a4a45;">Every piece cures fully — usually 3 to 7 days — before it's sanded, sealed and photographed for the shop.</p>
+          <span class="eyebrow">Client Love</span>
+          <h2>Cherished by Couples Across the Country</h2>
+        </div>
+      </div>
+
+      <div class="quote-grid">
+        <div class="quote-card">
+          <p>“Sarina preserved our wedding varmala in a 14-inch round wall clock. Every single petal looks as fresh as our wedding day. It’s the first thing guests compliment in our living room!”</p>
+          <div class="author">— Tanya & Rishabh (Mumbai)</div>
+        </div>
+        <div class="quote-card">
+          <p>“I ordered a custom couple heart plaque for our 5th anniversary with our engagement picture and gold flakes. The finishing was so luxurious and glossy, my wife was moved to tears.”</p>
+          <div class="author">— Kabir S. (Bangalore)</div>
+        </div>
+        <div class="quote-card">
+          <p>“The custom ocean wave scenery clock Sarina made for our coastal apartment has such incredible 3D wave depth. You can genuinely feel the care and art poured into it.”</p>
+          <div class="author">— Dr. Neha (Goa)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs Section -->
+  <section id="faqs" style="background:var(--paper-2);border-top:1px solid var(--line);">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Got Questions?</span>
+          <h2>Frequently Asked Questions</h2>
+        </div>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-card">
+          <h4>How do I courier my wedding varmala or flowers?</h4>
+          <p>Once you connect on WhatsApp, we provide complete, easy packing guidelines to courier fresh or semi-dried florals safely to our studio from anywhere in India.</p>
+        </div>
+        <div class="faq-card">
+          <h4>How long does a custom resin keepsake take?</h4>
+          <p>Custom crafting typically takes 10 to 14 working days (4–5 days for delicate floral drying, followed by multi-layered pouring and 7 full days of curing for diamond clarity). The overall delivery timeline may vary depending on your delivery location and how large or detailed your order is. Sarina will provide an exact, personalized delivery date when discussing your custom piece on WhatsApp!</p>
+        </div>
+        <div class="faq-card">
+          <h4>Will the flowers or photos fade over time?</h4>
+          <p>We use premium UV-resistant, non-yellowing artist-grade epoxy resin. Keepsakes stay crystal clear for decades when kept away from direct, harsh sun and high heat.</p>
+        </div>
+        <div class="faq-card">
+          <h4>Can I request custom colors or themes?</h4>
+          <p>Absolutely! Sarina custom-matches any color theme — whether you desire soft blush pink, ocean turquoise, royal burgundy, or pure white with 24k gold leaf foil.</p>
         </div>
       </div>
     </div>
@@ -79,49 +292,139 @@
   <div class="wrap footer-grid">
     <div>
       <div class="brand">sarina<span class="dot">·</span>creates</div>
-      <p style="max-width:32ch;color:#3a4a45;margin-top:10px;">Hand-poured resin artwork, coasters and homeware. Made one layer at a time.</p>
+      <p style="max-width:34ch;color:#5D4B53;margin-top:10px;">Preserving love stories, wedding florals, and nature's scenery in bespoke, hand-poured crystal resin.</p>
     </div>
     <div>
-      <h4>Shop</h4>
-      <a href="shop.html">All pieces</a>
-      <a href="cart.html">Cart</a>
-      <a href="account.html">My orders</a>
+      <h4>Explore</h4>
+      <a href="#custom-builder">Custom Keepsakes</a>
+      <a href="shop.html">Ready Pieces</a>
+      <a href="cart.html">Shopping Cart</a>
+      <a href="account.html">My Orders</a>
     </div>
     <div>
-      <h4>Studio</h4>
-      <a href="mailto:sarinaquadri71@gmail.com">Email the studio</a>
-      <a href="admin/login.html">Studio login</a>
+      <h4>Connect with Sarina</h4>
+      <a href="mailto:sarinaquadri71@gmail.com">sarinaquadri71@gmail.com</a>
+      <a href="https://wa.me/917846907030" target="_blank" rel="noopener">+91 78469 07030</a>
+      <a href="admin/login.html">Admin Login 🔒</a>
       <div class="social-line">
         <a href="https://instagram.com/sarinacreates_" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>@sarinacreates_</a>
-        <a href="https://wa.me/917846907030" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.02h-.01a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.36c0-4.53 3.69-8.22 8.24-8.22 2.2 0 4.27.86 5.82 2.42a8.17 8.17 0 0 1 2.41 5.81c0 4.54-3.69 8.2-8.23 8.2Zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.22.89 2.41 1.02 2.57.12.17 1.75 2.67 4.24 3.75.59.26 1.06.41 1.42.53.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.23-.17-.48-.29Z"/></svg>+91 78469 07030</a>
+        <a href="https://wa.me/917846907030" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.02h-.01a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.36c0-4.53 3.69-8.22 8.24-8.22 2.2 0 4.27.86 5.82 2.42a8.17 8.17 0 0 1 2.41 5.81c0 4.54-3.69 8.2-8.23 8.2Zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.22.89 2.41 1.02 2.57.12.17 1.75 2.67 4.24 3.75.59.26 1.06.41 1.42.53.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.23-.17-.48-.29Z"/></svg>WhatsApp</a>
       </div>
     </div>
   </div>
-  <div class="wrap fine">© <span id="yr"></span> sarinacreates. Every piece is hand-poured, so small variations are part of the piece.</div>
+  <div class="wrap fine">© <span id="yr"></span> sarinacreates. Handcrafted with love · Every creation is one of a kind.</div>
 </footer>
 
 <script src="js/app.js"></script>
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Load featured shop pieces
   document.addEventListener('DOMContentLoaded', async () => {
     const all = await SC.getProducts();
     const featured = all.slice(0, 3);
-    document.getElementById('featured').innerHTML = featured.map(p => `
-      <a class="card" href="product.html?id=${p.id}">
-        <div class="art-tile" data-art="${p.id}">
-          ${p.stock === 0 ? '<span class="badge sold">Sold</span>' : ''}
-        </div>
-        <div class="meta">
-          <div>
-            <h3>${p.name}</h3>
-            <div class="dims">${p.dims}</div>
+    const featuredEl = document.getElementById('featured');
+    if (featuredEl) {
+      featuredEl.innerHTML = featured.map(p => `
+        <a class="card" href="product.html?id=${p.id}">
+          <div class="art-tile" data-art="${p.id}">
+            ${p.stock === 0 ? '<span class="badge sold">Sold</span>' : ''}
           </div>
-          <div class="price">${SC.money(p.price)}</div>
-        </div>
-      </a>`).join('');
-    SC.renderTilesOnPage(all);
+          <div class="meta">
+            <div>
+              <h3>${p.name}</h3>
+              <div class="dims">${p.dims}</div>
+            </div>
+            <div class="price">${SC.money(p.price)}</div>
+          </div>
+        </a>`).join('');
+      SC.renderTilesOnPage(all);
+    }
   });
+
+  // ---------- Interactive Custom Builder Logic ----------
+  const state = {
+    occasion: "Wedding Flower Keepsake",
+    shape: "Heart Keepsake Plaque (8–10 in)",
+    theme: "Rose Gold & Blush Cream (Romantic)",
+    names: "Aarav & Meera",
+    date: "14.02.2025",
+    notes: ""
+  };
+
+  function wireChoiceGroup(containerId, stateKey, onSelect) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const btns = container.querySelectorAll('.choice-btn');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state[stateKey] = btn.getAttribute('data-val');
+        if (onSelect) onSelect(state[stateKey]);
+        updatePreview();
+      });
+    });
+  }
+
+  function updatePreview() {
+    state.names = document.getElementById('custom-names').value.trim() || "Your Names";
+    state.date = document.getElementById('custom-date').value.trim() || "Your Date";
+    state.notes = document.getElementById('custom-notes').value.trim();
+
+    document.getElementById('prev-occasion').textContent = state.occasion;
+    document.getElementById('prev-shape').textContent = state.shape;
+    document.getElementById('prev-theme').textContent = state.theme;
+    document.getElementById('prev-names').textContent = state.names;
+    document.getElementById('prev-date').textContent = state.date;
+    document.getElementById('preview-heading').textContent = `${state.occasion.split(' ')[0]} ${state.shape.split(' ')[0]}`;
+
+    // Generate WhatsApp text
+    const waText = encodeURIComponent(
+      `Hello Sarina! ✨\n\nI would love to order a custom resin piece:\n` +
+      `• *Occasion:* ${state.occasion}\n` +
+      `• *Shape & Size:* ${state.shape}\n` +
+      `• *Color Theme:* ${state.theme}\n` +
+      `• *Names/Initials:* ${state.names}\n` +
+      `• *Special Date:* ${state.date}\n` +
+      (state.notes ? `• *Special Notes:* ${state.notes}\n` : '') +
+      `\nCould you please share quotation and flower sending details? Thank you! 💕`
+    );
+    document.getElementById('whatsapp-order-btn').href = `https://wa.me/917846907030?text=${waText}`;
+
+    // Generate Email mailto
+    const mailSubject = encodeURIComponent(`Custom Keepsake Inquiry: ${state.names} (${state.occasion})`);
+    const mailBody = encodeURIComponent(
+      `Hi Sarina,\n\nI want to design a custom keepsake:\n- Occasion: ${state.occasion}\n- Shape: ${state.shape}\n- Color Theme: ${state.theme}\n- Names: ${state.names}\n- Date: ${state.date}\n- Details: ${state.notes}\n\nPlease let me know the quote and next steps.`
+    );
+    document.getElementById('email-order-btn').href = `mailto:sarinaquadri71@gmail.com?subject=${mailSubject}&body=${mailBody}`;
+  }
+
+  // Wire buttons
+  wireChoiceGroup('occasion-choices', 'occasion');
+  wireChoiceGroup('shape-choices', 'shape');
+  wireChoiceGroup('theme-choices', 'theme');
+
+  // Wire text inputs
+  ['custom-names', 'custom-date', 'custom-notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updatePreview);
+  });
+
+  // Wire occasion cards in the above section to select and scroll
+  document.querySelectorAll('[data-set-occasion]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const occ = link.getAttribute('data-set-occasion');
+      const targetBtn = document.querySelector(`#occasion-choices .choice-btn[data-val*="${occ.split(' ')[0]}"]`);
+      if (targetBtn) targetBtn.click();
+    });
+  });
+
+  updatePreview();
 </script>
+
+<a class="instagram-float" href="https://instagram.com/sarinacreates_" target="_blank" rel="noopener" aria-label="Follow us on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+
 <a class="whatsapp-float" href="https://wa.me/917846907030" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.02h-.01a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.36c0-4.53 3.69-8.22 8.24-8.22 2.2 0 4.27.86 5.82 2.42a8.17 8.17 0 0 1 2.41 5.81c0 4.54-3.69 8.2-8.23 8.2Zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.22.89 2.41 1.02 2.57.12.17 1.75 2.67 4.24 3.75.59.26 1.06.41 1.42.53.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.23-.17-.48-.29Z"/></svg></a>
 
 </body>

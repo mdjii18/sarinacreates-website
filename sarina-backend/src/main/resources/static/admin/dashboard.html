@@ -14,52 +14,100 @@
 <div class="admin-shell" id="gate" style="display:none;">
   <aside class="admin-side">
     <a href="../index.html" class="brand">sarina<span class="dot">·</span>creates</a>
+    <span class="admin-side-tag">✨ Studio Portal</span>
     <nav>
-      <a href="#overview" data-tab="overview" class="active">Overview</a>
-      <a href="#orders" data-tab="orders">Orders</a>
-      <a href="#products" data-tab="products">Products</a>
-      <a href="#settings" data-tab="settings">Settings</a>
-      <a href="#" id="logout" style="margin-top:20px;opacity:.8;">Log out</a>
+      <a href="#overview" data-tab="overview" class="active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Overview</a>
+      <a href="#orders" data-tab="orders"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Orders</a>
+      <a href="#products" data-tab="products"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M11 3L8 9l4 12 4-12-3-6"/><line x1="2" y1="9" x2="22" y2="9"/></svg>Products</a>
+      <a href="#settings" data-tab="settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+      <a href="../index.html" target="_blank" style="margin-top:20px;font-size:0.82rem;opacity:0.85;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Storefront</a>
+      <button type="button" id="lumos-btn" class="lumos-btn" title="Harry Potter Spell: Lumos / Nox">
+        <span style="display:inline-flex;align-items:center;gap:8px;">
+          <span id="lumos-icon">⚡</span>
+          <span id="lumos-text">Lumos</span>
+        </span>
+        <span class="lumos-sparkle">✨</span>
+      </button>
+      <a href="#" id="logout"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log out</a>
     </nav>
   </aside>
-  <div class="admin-main">
+  <div class="admin-main" id="admin-main">
+
+    <div id="lumos-banner" class="lumos-banner" style="display:none;">
+      <div class="lumos-header">
+        <span class="lumos-tag">⚡ Hogwarts Atelier · Lumos Active</span>
+        <button type="button" class="lumos-nox-btn" id="banner-nox-btn">🪄 Cast Nox</button>
+      </div>
+      <div class="lumos-body">
+        <div class="lumos-art-wrap" title="Hogwarts Castle under Lumos Charm">
+          <img src="../images/hogwarts-lumos.jpg" alt="Hogwarts Castle Lumos" class="lumos-art-img" id="lumos-art-img">
+          <div class="lumos-art-caption">✨ Hogwarts Castle · Lumos</div>
+        </div>
+        <div class="lumos-content">
+          <blockquote class="lumos-quote-text" id="lumos-quote">
+            “Happiness can be found even in the darkest of times, if one only remembers to turn on the light.”
+          </blockquote>
+          <div class="lumos-quote-author" id="lumos-author">
+            — Albus Dumbledore, Harry Potter and the Prisoner of Azkaban
+          </div>
+          <div class="lumos-crest-badge">
+            🏰 <em>“Draco Dormiens Nunquam Titillandus”</em> · Hogwarts School of Witchcraft & Wizardry
+          </div>
+        </div>
+      </div>
+    </div>
 
     <section id="tab-overview" class="tab-panel">
-      <h1 style="font-size:1.8rem;">Overview</h1>
+      <div style="margin-bottom:24px;">
+        <span class="eyebrow">Studio Performance</span>
+        <h1 style="font-size:2rem;margin-top:4px;">Overview</h1>
+      </div>
       <div class="stat-row" id="stats"></div>
-      <h3>Latest orders</h3>
+      <h3 style="margin-top:36px;margin-bottom:14px;">Latest Keepsake & Art Orders</h3>
       <div id="latest-orders"></div>
     </section>
 
     <section id="tab-orders" class="tab-panel" style="display:none;">
-      <div class="section-head"><h1 style="font-size:1.8rem;">Orders</h1></div>
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Management</span>
+          <h1 style="font-size:2rem;margin-top:4px;">Customer Orders</h1>
+        </div>
+      </div>
       <div id="orders-table"></div>
     </section>
 
     <section id="tab-products" class="tab-panel" style="display:none;">
       <div class="section-head">
-        <h1 style="font-size:1.8rem;">Products</h1>
-        <button class="btn btn-primary btn-sm" id="add-product-btn">Add a piece</button>
+        <div>
+          <span class="eyebrow">Catalogue</span>
+          <h1 style="font-size:2rem;margin-top:4px;">Resin Pieces</h1>
+        </div>
+        <button class="btn btn-romantic btn-sm" id="add-product-btn">✨ Add a New Piece</button>
       </div>
       <div id="products-table"></div>
     </section>
 
     <section id="tab-settings" class="tab-panel" style="display:none;">
-      <h1 style="font-size:1.8rem;">Settings</h1>
-      <div class="form-panel" style="margin:0;max-width:420px;">
-        <h3 style="font-size:1rem;">Change admin password</h3>
+      <div style="margin-bottom:24px;">
+        <span class="eyebrow">Security & Credentials</span>
+        <h1 style="font-size:2rem;margin-top:4px;">Settings</h1>
+      </div>
+      <div class="form-panel" style="margin:0;max-width:440px;">
+        <h3 style="font-size:1.15rem;margin-top:0;">Change Master Password</h3>
+        <p style="font-size:0.86rem;color:#6A5A60;margin-top:4px;margin-bottom:18px;">Update the password used to access this studio dashboard.</p>
         <div id="pw-msg"></div>
         <form id="pw-form">
           <div class="field">
-            <label for="new-pw">New password</label>
+            <label for="new-pw">New Password</label>
             <div class="pw-wrap">
-              <input id="new-pw" type="password" minlength="6" required autocomplete="new-password">
+              <input id="new-pw" type="password" minlength="6" required autocomplete="new-password" placeholder="At least 6 characters">
               <button type="button" class="pw-toggle" aria-label="Show password" onclick="togglePw('new-pw',this)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               </button>
             </div>
           </div>
-          <button class="btn btn-teal btn-block" type="submit">Update password</button>
+          <button class="btn btn-romantic btn-block" type="submit">Update Password</button>
         </form>
       </div>
     </section>
@@ -106,7 +154,7 @@
         <p class="hint">Any 3 hex colours — used only until at least one photo is added above.</p>
       </div>
       <div style="display:flex;gap:10px;">
-        <button type="submit" class="btn btn-primary">Save piece</button>
+        <button type="submit" class="btn btn-romantic">Save Piece</button>
         <button type="button" class="btn btn-ghost" id="cancel-modal">Cancel</button>
       </div>
     </form>
@@ -228,6 +276,73 @@
       document.getElementById('pw-msg').innerHTML = `<div class="success-msg">Password updated.</div>`;
       document.getElementById('pw-form').reset();
     });
+
+    // Harry Potter "Lumos / Nox" Easter Egg
+    const HP_SPELL_QUOTES = [
+      {
+        quote: "“Happiness can be found even in the darkest of times, if one only remembers to turn on the light.”",
+        author: "— Albus Dumbledore, Harry Potter and the Prisoner of Azkaban"
+      },
+      {
+        quote: "“I solemnly swear that I am up to no good.”",
+        author: "— The Marauder's Map, Harry Potter and the Prisoner of Azkaban"
+      },
+      {
+        quote: "“Words are, in my not-so-humble opinion, our most inexhaustible source of magic.”",
+        author: "— Albus Dumbledore, Harry Potter and the Deathly Hallows"
+      },
+      {
+        quote: "“It is our choices, Harry, that show what we truly are, far more than our abilities.”",
+        author: "— Albus Dumbledore, Harry Potter and the Chamber of Secrets"
+      },
+      {
+        quote: "“After all this time? — Always.”",
+        author: "— Severus Snape & Albus Dumbledore, Harry Potter and the Deathly Hallows"
+      },
+      {
+        quote: "“Working hard is important, but there is something that matters even more: believing in yourself.”",
+        author: "— Harry Potter, Harry Potter and the Order of the Phoenix"
+      }
+    ];
+
+    let lumosActive = false;
+    let quoteIndex = 0;
+    const lumosBtn = document.getElementById('lumos-btn');
+    const lumosIcon = document.getElementById('lumos-icon');
+    const lumosText = document.getElementById('lumos-text');
+    const lumosBanner = document.getElementById('lumos-banner');
+    const lumosQuote = document.getElementById('lumos-quote');
+    const lumosAuthor = document.getElementById('lumos-author');
+    const bannerNoxBtn = document.getElementById('banner-nox-btn');
+    const adminMain = document.getElementById('admin-main');
+
+    function toggleLumos(state) {
+      lumosActive = state !== undefined ? state : !lumosActive;
+      if (lumosActive) {
+        const item = HP_SPELL_QUOTES[quoteIndex % HP_SPELL_QUOTES.length];
+        quoteIndex++;
+        lumosQuote.textContent = item.quote;
+        lumosAuthor.textContent = item.author;
+        lumosBanner.style.display = 'block';
+        lumosBtn.classList.add('active');
+        lumosIcon.textContent = '🪄';
+        lumosText.textContent = 'Nox';
+        if (adminMain) adminMain.classList.add('lumos-glow');
+      } else {
+        lumosBanner.style.display = 'none';
+        lumosBtn.classList.remove('active');
+        lumosIcon.textContent = '⚡';
+        lumosText.textContent = 'Lumos';
+        if (adminMain) adminMain.classList.remove('lumos-glow');
+      }
+    }
+
+    if (lumosBtn) {
+      lumosBtn.addEventListener('click', () => toggleLumos());
+    }
+    if (bannerNoxBtn) {
+      bannerNoxBtn.addEventListener('click', () => toggleLumos(false));
+    }
   }
 
   let currentImages = [];   // preview list shown in the modal (URLs + local data: previews)

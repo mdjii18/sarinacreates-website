@@ -37,11 +37,15 @@ const SC = (() => {
     if (!localStorage.getItem(KEYS.cart)) write(KEYS.cart, []);
   }
 
-  // ---------- products (server-backed) ----------
-  async function getProducts() {
-    const res = await fetch("/api/products");
-    if (!res.ok) return [];
-    return res.json();
+  // ---------- products (server-backed with deduplication & caching) ----------
+  let cachedProductsPromise = null;
+  async function getProducts(forceRefresh = false) {
+    if (!cachedProductsPromise || forceRefresh) {
+      cachedProductsPromise = fetch("/api/products")
+        .then(res => res.ok ? res.json() : [])
+        .catch(() => []);
+    }
+    return cachedProductsPromise;
   }
   async function getProduct(id) {
     const res = await fetch("/api/products/" + encodeURIComponent(id));
@@ -85,10 +89,12 @@ const SC = (() => {
       const err = await res.json().catch(() => ({}));
       return { ok: false, error: err.error || "Couldn't save this piece." };
     }
+    cachedProductsPromise = null;
     return { ok: true, product: await res.json() };
   }
   async function deleteProduct(id) {
     const token = getAdminToken();
+    cachedProductsPromise = null;
     await fetch("/api/products/" + encodeURIComponent(id), {
       method: "DELETE",
       headers: { Authorization: "Bearer " + token }
@@ -378,7 +384,9 @@ const SC = (() => {
 
   init();
   document.addEventListener("DOMContentLoaded", () => {
-    renderTilesOnPage();
+    if (document.querySelectorAll("[data-art]").length > 0) {
+      renderTilesOnPage();
+    }
     updateNav();
     setupMailtoLinks();
   });
